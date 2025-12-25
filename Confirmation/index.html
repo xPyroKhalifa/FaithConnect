@@ -95,7 +95,6 @@
             margin-top: 6px;
         }
 
-        /* Accessibility/focus */
         .btn:focus-visible {
             outline: 3px solid #11182744;
             outline-offset: 2px;
@@ -111,84 +110,32 @@
         <div id="status" class="status">Verifying…</div>
 
         <div id="actions" class="actions" aria-live="polite" aria-atomic="true">
-            /Continue</a>
-            <div class="small">You can safely close this page if it doesn’t redirect.</div>
+            <a id="dashboardLink" div class="small">You can safely close this page if it doesn’t redirect.
+        </div>
         </div>
     </main>
 
     <script>
-        /**
-         * Simple, framework-free confirmation logic:
-         * - Reads a token from either query (?token=abc) or the last path segment (/confirmation/abc)
-         * - Simulates a verification call (replace simulateVerifyToken with real API)
-         * - Updates UI accordingly
-         *
-         * NOTE: If you don't have an API yet, the page will still render and show success
-         * after a short delay. Replace simulateVerifyToken() with a real fetch.
-         */
-
-        // Helpers to read token from URL
-        function getTokenFromUrl() {
-            const url = new URL(window.location.href);
-            // 1) Query param: ?token=abc
-            const qToken = url.searchParams.get('token');
-            if (qToken) return qToken;
-            // 2) Path segment: /confirmation/abc
-            const segments = url.pathname.split('/').filter(Boolean);
-            const confirmationIndex = segments.indexOf('confirmation');
-            if (confirmationIndex > -1 && segments[confirmationIndex + 1]) {
-                return segments[confirmationIndex + 1];
-            }
-            return null;
-        }
-
-        // Simulate a token verification (replace with real API call)
-        async function simulateVerifyToken(token) {
-            // Example of a real call:
-            // const res = await fetch('https://api.yourdomain.com/auth/verify-email', {
-            //   method: 'POST',
-            //   headers: { 'Content-Type': 'application/json' },
-            //   body: JSON.stringify({ token })
-            // });
-            // if (!res.ok) throw new Error('Invalid token');
-            // return await res.json();
-
-            return new Promise((resolve, reject) => {
-                setTimeout(() => {
-                    // For demo purposes, accept any non-empty token; otherwise fail
-                    token ? resolve({ ok: true }) : reject(new Error('Missing token'));
-                }, 800);
-            });
-        }
-
-        async function main() {
+        // Always mark as verified (no real token verification)
+        (function alwaysVerified() {
             const statusEl = document.getElementById('status');
             const actionsEl = document.getElementById('actions');
             const dashboardLink = document.getElementById('dashboardLink');
 
-            const token = getTokenFromUrl();
+            statusEl.textContent = 'Email confirmed!';
+            statusEl.classList.remove('error');
+            statusEl.classList.add('success');
 
-            try {
-                await simulateVerifyToken(token);
-                statusEl.textContent = 'Email confirmed!';
-                statusEl.classList.remove('error');
-                statusEl.classList.add('success');
+            // Choose where Continue goes (adjust as needed)
+            dashboardLink.href = '/';
 
-                // Choose where "Continue" goes (adjust as needed)
-                // If you have a dashboard page, set it to '/dashboard'.
-                dashboardLink.href = '/';
-                actionsEl.style.display = 'block';
-            } catch (err) {
-                statusEl.textContent = 'Verification failed. This link may be invalid or expired.';
-                statusEl.classList.remove('success');
-                statusEl.classList.add('error');
-                actionsEl.style.display = 'block';
-                dashboardLink.textContent = 'Go to Home';
-                dashboardLink.href = '/';
-            }
-        }
+            actionsEl.style.display = 'block';
 
-        main();
+            // Optional auto-redirect after 1.5s
+            setTimeout(() => {
+                window.location.href = dashboardLink.href;
+            }, 1500);
+        })();
     </script>
 </body>
 
