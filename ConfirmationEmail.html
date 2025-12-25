@@ -68,33 +68,6 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script>
-        const SUPABASE_URL = 'https://zzdsbpmtjrixomnmxwub.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp6ZHNicG10anJpeG9tbm14d3ViIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MTk5NjMsImV4cCI6MjA4MTE5NTk2M30.JzVdrfNvyEwzNU6PB49jMawfz9Am-WLT3xj9KwVNSdc';
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-        async function verifyEmail() {
-            const url = new URL(window.location.href);
-            const token_hash = url.searchParams.get('token_hash') || url.searchParams.get('token');
-            if (!token_hash) {
-                document.getElementById('status').textContent = 'Invalid link. Please try again.';
-                return;
-            }
-            try {
-                const { error } = await supabase.auth.verifyOtp({ token_hash, type: 'email' });
-                if (error) throw error;
-                document.getElementById('status').textContent = 'Email verified! You are now signed in.';
-                document.getElementById('actions').style.display = 'block';
-                setTimeout(() => {
-                    window.location.href = '/dashboard';
-                }, 1500);
-            } catch (err) {
-                document.getElementById('status').textContent = 'Verification failed. Link may be expired.';
-            }
-        }
-        verifyEmail();
-    </script>
 </body>
 
 </html>
