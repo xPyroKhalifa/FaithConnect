@@ -61,6 +61,7 @@
             color: var(--muted);
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: 10px;
         }
 
@@ -91,7 +92,22 @@
             border-radius: 50%;
             background: var(--success);
             position: relative;
+            display: inline-grid;
+            place-items: center;
         }
+
+        .check::before {
+            content: '';
+            width: 9px;
+            /* size of the tick */
+            height: 5px;
+            border: 2px solid #fff;
+            border-top: none;
+            border-right: none;
+            transform: rotate(-45deg);
+            /* no absolute positioning needed; it's centered by grid */
+        }
+
 
         .check::after {
             content: '';
@@ -152,7 +168,7 @@
 
         <div id="actions" class="actions" aria-live="polite" aria-atomic="true">
             <a id="ue</a>
-      <div class=" small">You can safely close this page if it doesn’t redirect.
+      <div class=" small">You can safely close this page and go back to the app.
         </div>
         </div>
     </main>
