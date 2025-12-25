@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Email Confirmation • FaithConnect</title>
     <meta name="description" content="Confirm your email for FaithConnect." />
+
     <style>
         :root {
             --bg: #FFF8E6;
@@ -54,7 +55,6 @@
             color: var(--muted);
         }
 
-        /* Loading status */
         .status {
             margin-top: 12px;
             font-size: 14px;
@@ -69,7 +69,7 @@
             width: 18px;
             height: 18px;
             border-radius: 50%;
-            border: 2px solid rgba(0, 0, 0, 0.12);
+            border: 2px solid rgba(0, 0, 0, 0.15);
             border-top-color: var(--brand);
             animation: spin 0.9s linear infinite;
         }
@@ -80,18 +80,15 @@
             }
         }
 
-        /* Success style */
         .status.success {
             color: var(--success);
         }
 
         .check {
-            display: inline-block;
             width: 18px;
             height: 18px;
             border-radius: 50%;
             background: var(--success);
-            position: relative;
             display: inline-grid;
             place-items: center;
         }
@@ -99,23 +96,7 @@
         .check::before {
             content: '';
             width: 9px;
-            /* size of the tick */
             height: 5px;
-            border: 2px solid #fff;
-            border-top: none;
-            border-right: none;
-            transform: rotate(-45deg);
-            /* no absolute positioning needed; it's centered by grid */
-        }
-
-
-        .check::after {
-            content: '';
-            position: absolute;
-            left: 4px;
-            top: 8px;
-            width: 6px;
-            height: 3px;
             border: 2px solid #fff;
             border-top: none;
             border-right: none;
@@ -126,7 +107,7 @@
             display: inline-block;
             background: var(--brand);
             color: #fff;
-            padding: 12px 18px;
+            padding: 12px 20px;
             border-radius: 8px;
             text-decoration: none;
             font-weight: bold;
@@ -157,49 +138,46 @@
 
 <body>
     <main class="container" role="main">
-        <h1>Confirming your email…</h1>
-        <p>Please wait while we verify your link.</p>
+        <h1 id="title">Confirming your email…</h1>
+        <p id="description">Please wait while we verify your link.</p>
 
-        <!-- Loading status shown first -->
-        <div id="status" class="status">
+        <div id="status" class="status" aria-live="polite">
             <span class="spinner" aria-hidden="true"></span>
             <span id="statusText">Verifying…</span>
         </div>
 
-        <div id="actions" class="actions" aria-live="polite" aria-atomic="true">
-            <a id="ue</a>
-      <div class=" small">You can safely close this page and go back to the app.
-        </div>
+        <div id="actions" class="actions">
+            <a id="continueBtn" href="/" class="btn">Continue</a>
+            <div class="small">You can safely close this page and return to the app.</div>
         </div>
     </main>
 
     <script>
-        /**
-         * Always show success after a short loading period.
-         * If you later want real verification, replace this block
-         * with a call to Supabase verifyOtp and set success/error accordingly.
-         */
-        (function showLoadingThenSuccess() {
+        (function () {
+            const titleEl = document.getElementById('title');
+            const descEl = document.getElementById('description');
             const statusEl = document.getElementById('status');
-            const statusTextEl = document.getElementById('statusText');
             const actionsEl = document.getElementById('actions');
             const continueBtn = document.getElementById('continueBtn');
 
-            // Simulate loading (1 second)
+            // Simulate verification delay (replace with real auth logic if needed)
             setTimeout(() => {
-                // Replace loading spinner with a green check + success text
-                statusEl.classList.add('success');
-                statusEl.innerHTML = '<span class="check" aria-hidden="true"></span><span>Email confirmed!</span>';
+                titleEl.textContent = 'Account Activated 🎉';
+                descEl.textContent = 'Your email has been successfully verified.';
 
-                // Reveal actions
+                statusEl.classList.add('success');
+                statusEl.innerHTML = `
+                    <span class="check" aria-hidden="true"></span>
+                    <span>Email confirmed!</span>
+                `;
+
                 actionsEl.style.display = 'block';
 
                 // Optional auto-redirect after 1.5s
-                // Change destination as needed (e.g., '/dashboard')
-                continueBtn.href = '/';
                 setTimeout(() => {
                     window.location.href = continueBtn.href;
                 }, 1500);
+
             }, 1000);
         })();
     </script>
