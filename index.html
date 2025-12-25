@@ -15,7 +15,6 @@
             --brand: #F59E0B;
             --brand-dark: #D97706;
             --success: #16A34A;
-            --error: #DC2626;
         }
 
         * {
@@ -55,18 +54,56 @@
             color: var(--muted);
         }
 
+        /* Loading status */
         .status {
             margin-top: 12px;
             font-size: 14px;
             color: var(--muted);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
         }
 
+        .spinner {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            border: 2px solid rgba(0, 0, 0, 0.12);
+            border-top-color: var(--brand);
+            animation: spin 0.9s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Success style */
         .status.success {
             color: var(--success);
         }
 
-        .status.error {
-            color: var(--error);
+        .check {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--success);
+            position: relative;
+        }
+
+        .check::after {
+            content: '';
+            position: absolute;
+            left: 4px;
+            top: 8px;
+            width: 6px;
+            height: 3px;
+            border: 2px solid #fff;
+            border-top: none;
+            border-right: none;
+            transform: rotate(-45deg);
         }
 
         .btn {
@@ -84,6 +121,11 @@
             background: var(--brand-dark);
         }
 
+        .btn:focus-visible {
+            outline: 3px solid #11182744;
+            outline-offset: 2px;
+        }
+
         .actions {
             margin-top: 16px;
             display: none;
@@ -94,11 +136,6 @@
             color: var(--muted);
             margin-top: 6px;
         }
-
-        .btn:focus-visible {
-            outline: 3px solid #11182744;
-            outline-offset: 2px;
-        }
     </style>
 </head>
 
@@ -107,34 +144,47 @@
         <h1>Confirming your email…</h1>
         <p>Please wait while we verify your link.</p>
 
-        <div id="status" class="status">Verifying…</div>
+        <!-- Loading status shown first -->
+        <div id="status" class="status">
+            <span class="spinner" aria-hidden="true"></span>
+            <span id="statusText">Verifying…</span>
+        </div>
 
         <div id="actions" class="actions" aria-live="polite" aria-atomic="true">
-            <a id="dashboardLink" div class="small">You can safely close this page if it doesn’t redirect.
+            <a id="ue</a>
+      <div class=" small">You can safely close this page if it doesn’t redirect.
         </div>
         </div>
     </main>
 
     <script>
-        // Always mark as verified (no real token verification)
-        (function alwaysVerified() {
+        /**
+         * Always show success after a short loading period.
+         * If you later want real verification, replace this block
+         * with a call to Supabase verifyOtp and set success/error accordingly.
+         */
+        (function showLoadingThenSuccess() {
             const statusEl = document.getElementById('status');
+            const statusTextEl = document.getElementById('statusText');
             const actionsEl = document.getElementById('actions');
-            const dashboardLink = document.getElementById('dashboardLink');
+            const continueBtn = document.getElementById('continueBtn');
 
-            statusEl.textContent = 'Email confirmed!';
-            statusEl.classList.remove('error');
-            statusEl.classList.add('success');
-
-            // Choose where Continue goes (adjust as needed)
-            dashboardLink.href = '/';
-
-            actionsEl.style.display = 'block';
-
-            // Optional auto-redirect after 1.5s
+            // Simulate loading (1 second)
             setTimeout(() => {
-                window.location.href = dashboardLink.href;
-            }, 1500);
+                // Replace loading spinner with a green check + success text
+                statusEl.classList.add('success');
+                statusEl.innerHTML = '<span class="check" aria-hidden="true"></span><span>Email confirmed!</span>';
+
+                // Reveal actions
+                actionsEl.style.display = 'block';
+
+                // Optional auto-redirect after 1.5s
+                // Change destination as needed (e.g., '/dashboard')
+                continueBtn.href = '/';
+                setTimeout(() => {
+                    window.location.href = continueBtn.href;
+                }, 1500);
+            }, 1000);
         })();
     </script>
 </body>
