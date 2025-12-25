@@ -103,6 +103,11 @@
             transform: rotate(-45deg);
         }
 
+        .actions {
+            margin-top: 16px;
+            display: none;
+        }
+
         .btn {
             display: inline-block;
             background: var(--brand);
@@ -111,27 +116,18 @@
             border-radius: 8px;
             text-decoration: none;
             font-weight: bold;
-            transition: background 0.15s ease;
+            cursor: pointer;
+            border: none;
         }
 
         .btn:hover {
             background: var(--brand-dark);
         }
 
-        .btn:focus-visible {
-            outline: 3px solid #11182744;
-            outline-offset: 2px;
-        }
-
-        .actions {
-            margin-top: 16px;
-            display: none;
-        }
-
         .small {
             font-size: 12px;
             color: var(--muted);
-            margin-top: 6px;
+            margin-top: 8px;
         }
     </style>
 </head>
@@ -143,24 +139,29 @@
 
         <div id="status" class="status" aria-live="polite">
             <span class="spinner" aria-hidden="true"></span>
-            <span id="statusText">Verifying…</span>
+            <span>Verifying…</span>
         </div>
 
         <div id="actions" class="actions">
-            <a id="continueBtn" href="/" class="btn">Continue</a>
-            <div class="small">You can safely close this page and return to the app.</div>
+            <button class="btn" onclick="closePage()">Close this page</button>
+            <div class="small">
+                If the page does not close automatically, you may safely close this tab.
+            </div>
         </div>
     </main>
 
     <script>
+        function closePage() {
+            window.close();
+        }
+
         (function () {
             const titleEl = document.getElementById('title');
             const descEl = document.getElementById('description');
             const statusEl = document.getElementById('status');
             const actionsEl = document.getElementById('actions');
-            const continueBtn = document.getElementById('continueBtn');
 
-            // Simulate verification delay (replace with real auth logic if needed)
+            // Simulate verification delay
             setTimeout(() => {
                 titleEl.textContent = 'Account Activated 🎉';
                 descEl.textContent = 'Your email has been successfully verified.';
@@ -172,12 +173,6 @@
                 `;
 
                 actionsEl.style.display = 'block';
-
-                // Optional auto-redirect after 1.5s
-                setTimeout(() => {
-                    window.location.href = continueBtn.href;
-                }, 1500);
-
             }, 1000);
         })();
     </script>
